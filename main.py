@@ -9,10 +9,11 @@ import jwt
 
 # pylint: disable=import-error
 from flask import Flask, jsonify, request, abort
+import config as app_config
 
 
-JWT_SECRET = os.environ.get('JWT_SECRET', 'abc123abc1234')
-LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
+JWT_SECRET = os.environ.get('JWT_SECRET', app_config.JWT_SECRET)
+LOG_LEVEL = os.environ.get('LOG_LEVEL', app_config.LOG_LEVEL)
 
 
 def _logger():
@@ -36,6 +37,7 @@ def _logger():
 LOG = _logger()
 LOG.debug("Starting with log level: %s" % LOG_LEVEL )
 APP = Flask(__name__)
+APP.config.from_object(app_config)
 
 def require_jwt(function):
     """
